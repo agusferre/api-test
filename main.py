@@ -1,8 +1,16 @@
-from os import stat
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
+from google.cloud import bigquery
+import pandas as pd
 import requests
 import geopy.distance
+
+project_id = 'api-test-01010101'
+dataset_id = 'api_ds'
+table_id = project_id + '.' + dataset_id + '.' + 'api_db'
+
+client = bigquery.Client(project=project_id)
+dataset = client.dataset(dataset_id)
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,20 +36,29 @@ class traces(Resource):
                 'lat': ipResponse['lat'],
                 'lon': ipResponse['lon'],
                 'currencies': parseCurrencies(countryResponse),
-                'distance_to_uy': getDistanceToUy(countryResponse['latlng']) # I used the API response lat and lon as the statement asked for the countries distance, but I would have used the ip location instead.
+                'distance_to_uy': getDistanceToUy(countryResponse['latlng']) # I used the countries info API response lat and lon as the statement asked for the countries distance, but I would have used the ip location instead.
             }
+        bq_row = [{
+            'country': data['name'],
+            'distance': data['distance_to_uy']
+        }]
+        client.insert_rows_json(table_id, bq_row)
         return data
 
 class statistics(Resource):
     def get(self):
+        distance_query = """SELECT country, distance FROM `api-test-01010101.api_ds.api_db` GROUP BY country, distance ORDER BY distance desc"""
+        dis_df = client.query(distance_query).result().to_dataframe().head(1)
+        requests_query = """SELECT country, COUNT(country) count FROM `api-test-01010101.api_ds.api_db` GROUP BY country ORDER BY count desc"""
+        req_df = client.query(requests_query).result().to_dataframe().head(1)
         data = {
             'longest_distance': {
-                'country': '',
-                'value': 0
+                'country': dis_df['country'].values[0],
+                'value': dis_df['distance'].values[0]
             },
             'most_traced': {
-                'country': '',
-                'value':
+                'country': req_df['country'].values[0],
+                'value': int(req_df['count'].values[0])
             }
         }
         return data
