@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 from google.cloud import bigquery
-import pandas as pd
 import requests
 import geopy.distance
 

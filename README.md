@@ -20,7 +20,12 @@ Being able of handling one method each.
 
 ## Usage and endpoints
 
-# Traces resource
+### Base url
+
+The base url is *https://api-test-01010101.uc.r.appspot.com/*.
+So for any resource request it should be done using *https://api-test-01010101.uc.r.appspot.com/***{resource}**
+
+### Traces resource
 
 **Description**
 
@@ -54,6 +59,7 @@ The info requested being the following attributes:
 
 Example JSON:
 
+```json
 {
   'ip': '57.74.111.255',
   'name': 'Cuba', 
@@ -75,8 +81,9 @@ Example JSON:
   ], 
   'distance_to_uy': 6548.55
 }
+```
 
-# Statistics resource
+### Statistics resource
 
 **Description**
 
@@ -106,6 +113,7 @@ The statistical data being the following attributes:
 
 Example JSON:
 
+```json
 {
   'longest_distance': 
   {
@@ -118,5 +126,10 @@ Example JSON:
     'value': 19
   }
 }
+```
 
 ##Technical test comments
+
+###
+
+ # I used the countries info API response lat and lon as the statement asked for the countries distance, but I would have used the ip location instead.
