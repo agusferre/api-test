@@ -1,0 +1,6 @@
+Flask
+flask-restful
+bigquery
+pandas
+requests
+geopy
