@@ -1,13 +1,13 @@
-<<<<<<< HEAD
-# api-test
-=======
 # Countries RESTful API
 
 ## Index
 
 -Resources
+
 -Usage and endpoints
+
 -Technical test comments
+
 
 ## Resources 
 
@@ -22,29 +22,34 @@ Being able of handling one method each.
 
 # Traces resource
 
-*Description*
+**Description**
 
 This resource is used to receive some information about a specific ip address and the country it belongs to and also storing it in a database for later statistical usage.
 
-*Method*
+**Method**
 
 POST /traces, body: {"ip":"XXX.XXX.XXX.XXX"}
 
-*Parameters*
+**Parameters**
 
 It expects to receive one parameter in the body called "ip" wich contains a string value for a valid ip address.
 
-*Response*
+**Response**
 
 It returns a "200 OK" code on success and a json dictionary containing the data of the ip requested.
 
 The info requested being the following attributes:
 
 -The ip of the request.
+
 -The country that the ip belongs to.
+
 -The ISO codename of the country.
+
 -The IP coordinates (lat and lon).
+
 -An array of the oficial currencies for that country, each one containing the ISO code for the currency, its symbol and the actual conversion rate for that moment from the currency to USD.
+
 -Distance from the country to Uruguay in Kms.
 
 Example JSON:
@@ -73,27 +78,30 @@ Example JSON:
 
 # Statistics resource
 
-*Description*
+**Description**
 
 This resource is used to receive some statistical info about previous /traces requests made.
 
-*Method*
+**Method**
 
 GET /statistics
 
-*Parameters*
+**Parameters**
 
 No parameters are required for this request.
 
-*Response*
+**Response**
 
 It returns a "200 OK" code on success and a json dictionary containing the statistical data at that particular moment.
 
 The statistical data being the following attributes:
 
 -Name of the most distant country to Uruguay from which an ip address was used in a /traces request.
+
 -Distance of the most distant country to Uruguay from which an ip address was used in a /traces request.
+
 -Name of the most traced country from which an ip address was used in a /traces request.
+
 -Amount of traces of the most traced country from which an ip address was used in a /traces request.
 
 Example JSON:
@@ -112,6 +120,3 @@ Example JSON:
 }
 
 ##Technical test comments
-
-
->>>>>>> 868937585393e196aa236944f3a2dd861aac9f27
