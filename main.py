@@ -5,30 +5,24 @@ import pandas as pd
 import requests
 import geopy.distance
 
-project_id = 'api-test-01010101'
-dataset_id = 'api_ds'
-table_id = project_id + '.' + dataset_id + '.' + 'api_db'
-
-client = bigquery.Client(project=project_id)
-dataset = client.dataset(dataset_id)
-
 app = Flask(__name__)
 api = Api(app)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
 api_args = reqparse.RequestParser()
 api_args.add_argument('ip', type=str, required=True)
 
+project_id = 'api-test-01010101'
+dataset_id = 'api_ds'
+table_id = project_id + '.' + dataset_id + '.' + 'api_db'
+client = bigquery.Client(project=project_id)
+
 class traces(Resource):
     def post(self):
-        ip = api_args.parse_args().ip
-        queryParameters = '?fields=status,message,country,countryCode,lat,lon,currency'
-        ipResponse = requests.get('http://ip-api.com/json/' + ip + queryParameters).json()
-        countryCode = ipResponse['countryCode']
-        countryResponse = requests.get('https://restcountries.eu/rest/v2/alpha/' + countryCode).json()
-        if ipResponse['status'] == 'success' and 'name' in countryResponse:
+        try:
+            ip = api_args.parse_args().ip
+            queryParameters = '?fields=status,message,country,countryCode,lat,lon,currency'
+            ipResponse = requests.get('http://ip-api.com/json/' + ip + queryParameters).json()
+            countryCode = ipResponse['countryCode']
+            countryResponse = requests.get('https://restcountries.eu/rest/v2/alpha/' + countryCode).json()
             data = {
                 'ip': ip,
                 'name': ipResponse['country'],
@@ -36,31 +30,37 @@ class traces(Resource):
                 'lat': ipResponse['lat'],
                 'lon': ipResponse['lon'],
                 'currencies': parseCurrencies(countryResponse),
-                'distance_to_uy': getDistanceToUy(countryResponse['latlng']) # I used the countries info API response lat and lon as the statement asked for the countries distance, but I would have used the ip location instead.
+                'distance_to_uy': getDistanceToUy(countryResponse['latlng'])
             }
-        bq_row = [{
-            'country': data['name'],
-            'distance': data['distance_to_uy']
-        }]
-        client.insert_rows_json(table_id, bq_row)
+            bq_row = [{
+                'country': data['name'],
+                'distance': data['distance_to_uy']
+            }]
+            table_id = project_id + '.' + dataset_id + '.' + 'api_db'
+            client.insert_rows_json(table_id, bq_row)
+        except:
+            data = {'status': 'Error', 'message': 'Wrong IP address'}
         return data
 
 class statistics(Resource):
     def get(self):
-        distance_query = """SELECT country, distance FROM `api-test-01010101.api_ds.api_db` GROUP BY country, distance ORDER BY distance desc"""
-        dis_df = client.query(distance_query).result().to_dataframe().head(1)
-        requests_query = """SELECT country, COUNT(country) count FROM `api-test-01010101.api_ds.api_db` GROUP BY country ORDER BY count desc"""
-        req_df = client.query(requests_query).result().to_dataframe().head(1)
-        data = {
-            'longest_distance': {
-                'country': dis_df['country'].values[0],
-                'value': dis_df['distance'].values[0]
-            },
-            'most_traced': {
-                'country': req_df['country'].values[0],
-                'value': int(req_df['count'].values[0])
+        try:
+            distance_query = """SELECT country, distance FROM `api-test-01010101.api_ds.api_db` GROUP BY country, distance ORDER BY distance desc"""
+            dis_df = client.query(distance_query).result().to_dataframe().head(1)
+            requests_query = """SELECT country, COUNT(country) count FROM `api-test-01010101.api_ds.api_db` GROUP BY country ORDER BY count desc"""
+            req_df = client.query(requests_query).result().to_dataframe().head(1)
+            data = {
+                'longest_distance': {
+                    'country': dis_df['country'].values[0],
+                    'value': dis_df['distance'].values[0]
+                },
+                'most_traced': {
+                    'country': req_df['country'].values[0],
+                    'value': int(req_df['count'].values[0])
+                }
             }
-        }
+        except:
+            data = {'status': 'Internal Server Error', 'message': 'Database related error'}
         return data
 
 def parseCurrencies(obj):
@@ -79,8 +79,7 @@ def parseCurrencies(obj):
 
 def getDistanceToUy(point):
     point = tuple(point)
-    print(point)
-    uyPoint = (-33, -56) #(-32.559, -55.812)
+    uyPoint = (-33, -56)
     return round(geopy.distance.distance(point, uyPoint).km, 2)
 
 api.add_resource(traces, '/traces')
