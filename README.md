@@ -8,12 +8,12 @@
 
 -Technical test comments
 
-
 ## Resources 
 
 This API has two resources:
 
 /traces
+
 /statics
 
 Being able of handling one method each.
@@ -23,7 +23,7 @@ Being able of handling one method each.
 ### Base url
 
 The base url is *https://api-test-01010101.uc.r.appspot.com/*.
-So for any resource request it should be done using *https://api-test-01010101.uc.r.appspot.com/***{resource}**
+So for any resource request it should be done using *https://api-test-01010101.uc.r.appspot.com/{resource}*
 
 ### Traces resource
 
@@ -61,8 +61,8 @@ Example JSON:
 
 ```json
 {
-  'ip': '57.74.111.255',
-  'name': 'Cuba', 
+  ip: '57.74.111.255',
+  "name": 'Cuba', 
   'code': 'CU', 
   'lat': 23.1332, 
   'lon': -82.3594, 
@@ -128,8 +128,35 @@ Example JSON:
 }
 ```
 
-##Technical test comments
+## Technical test comments
 
-###
+### Requirements
 
- # I used the countries info API response lat and lon as the statement asked for the countries distance, but I would have used the ip location instead.
+This solution is uploaded to a github repository.
+
+I prefer to make documentation in some text editor platform like Google Docs or Google Slides besides a readme file, but because of the small size and complexity of this project I think that a readme file is enough. Also I wanted to finish it as soon as possible.
+
+The solution is deployed in a Google App Engine instance as stated in the usage section.
+
+### Recommendations
+
+1. I used both the suggested APIs for the intended porposes. I decided to use another API as none of the suggested show the complete info requested, specifically with two attributes.
+
+First, related to the currencies, I used the https://restcountries.eu API as none of the suggested ones lend the full list of currencies for a country. The http://ip-api.com API displays the main currency but for countries with more than one currency it was not enough.
+Another comment with this point is that I thought it was better to show the official currencies, this meaning that I didn't add USD to the list as showed in the example response you shared with me. This applies also to the symbol, as for example the official symbol for Uruguayan pesos is $ instead of $U.
+
+On the other hand, I used the same API named before to get the country coordinates as stated in the exercise. The suggested APIs didn't show the country coordinates but the ip ones. I would have used those coordinates for the distance to Uruguay calculation but I respected the statement as is.
+
+Finally, the conversions API has a free requests limit, so this would make the high concurrency environment impossible to satisfy with the current free pricing plan.
+
+2. Mainly due to the short time I was not able to make the extensive research I would have liked to do and the deployment itself, so I ended up deciding to use BigQuery as the database for this project, as I am pretty used to work with it. I don't think it is the optimal platform for storing the requests data in such high concurrency conditions but it can do a pretty good job nevertheless.
+
+3. I included all the answers to my questions in the previous paragraphs.
+
+### Additional comments
+
+I think it may be useful for your decision to know the approximate time it took for me to develop this solution. I could not dedicate more than a few days between this six days and something around 15 clean hours.
+
+Also it is the first time I build an API so it took me some time to achieve the needed knowledge.
+
+In conclusion, I would have liked to be able to dedicate a little more time to improve some features like the database choice or the documentation itself but I didn't want to delay the delivery anymore.
