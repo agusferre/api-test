@@ -2,18 +2,15 @@
 
 ## Index
 
--Resources
-
--Usage and endpoints
-
+-Resources  
+-Usage and endpoints  
 -Technical test comments
 
 ## Resources 
 
 This API has two resources:
 
-/traces
-
+/traces  
 /statics
 
 Being able of handling one method each.
@@ -45,16 +42,11 @@ It returns a "200 OK" code on success and a json dictionary containing the data 
 
 The info requested being the following attributes:
 
--The ip of the request.
-
--The country that the ip belongs to.
-
--The ISO codename of the country.
-
--The IP coordinates (lat and lon).
-
--An array of the oficial currencies for that country, each one containing the ISO code for the currency, its symbol and the actual conversion rate for that moment from the currency to USD.
-
+-The ip of the request.  
+-The country that the ip belongs to.  
+-The ISO codename of the country.  
+-The IP coordinates (lat and lon).  
+-An array of the oficial currencies for that country, each one containing the ISO code for the currency, its symbol and the actual conversion rate for that moment from the currency to USD.  
 -Distance from the country to Uruguay in Kms.
 
 Example JSON:
@@ -103,12 +95,9 @@ It returns a "200 OK" code on success and a json dictionary containing the stati
 
 The statistical data being the following attributes:
 
--Name of the most distant country to Uruguay from which an ip address was used in a /traces request.
-
--Distance of the most distant country to Uruguay from which an ip address was used in a /traces request.
-
--Name of the most traced country from which an ip address was used in a /traces request.
-
+-Name of the most distant country to Uruguay from which an ip address was used in a /traces request.  
+-Distance of the most distant country to Uruguay from which an ip address was used in a /traces request.  
+-Name of the most traced country from which an ip address was used in a /traces request.  
 -Amount of traces of the most traced country from which an ip address was used in a /traces request.
 
 Example JSON:
@@ -152,8 +141,7 @@ Finally, the conversions API has a free requests limit, so this would make the h
 
 ### Additional comments
 
-I think it may be useful for your decision to know the approximate time it took for me to develop this solution. I could not dedicate more than a few days between this six days and something around 15 total hours.
-
+I think it may be useful for your decision to know the approximate time it took for me to develop this solution. I could not dedicate more than a few days between this six days and something around 15 total hours.  
 Also it is the first time I build an API so it took me some time to achieve the needed knowledge.
 
 In conclusion, I would have liked to be able to dedicate a little more time to improve some features like the database choice or the documentation itself but I didn't want to delay the delivery anymore.
