@@ -61,7 +61,7 @@ Example JSON:
 
 ```json
 {
-  ip: "57.74.111.255",
+  "ip": "57.74.111.255",
   "name": "Cuba", 
   "code": "CU", 
   "lat": 23.1332, 
@@ -140,10 +140,10 @@ The solution is deployed in a Google App Engine instance as stated in the usage 
 
 ### Recommendations
 
-1. I used both the suggested APIs for the intended porposes. I decided to use another API as none of the suggested show the complete info requested, specifically with two attributes.
-First, related to the currencies, I used the https://restcountries.eu API as none of the suggested ones lend the full list of currencies for a country. The http://ip-api.com API displays the main currency but for countries with more than one currency it was not enough.
-Another comment with this point is that I thought it was better to show the official currencies, this meaning that I didn't add USD to the list as showed in the example response you shared with me. This applies also to the symbol, as for example the official symbol for Uruguayan pesos is $ instead of $U.
-On the other hand, I used the same API named before to get the country coordinates as stated in the exercise. The suggested APIs didn't show the country coordinates but the ip ones. I would have used those coordinates for the distance to Uruguay calculation but I respected the statement as is.
+1. I used both the suggested APIs for the intended porposes. I decided to use another API as none of the suggested show the complete info requested, specifically with two attributes.  
+First, related to the currencies, I used the https://restcountries.eu API as none of the suggested ones lend the full list of currencies for a country. The http://ip-api.com API displays the main currency but for countries with more than one currency it was not enough.  
+Another comment with this point is that I thought it was better to show the official currencies, this meaning that I didn't add USD to the list as showed in the example response you shared with me. This applies also to the symbol, as for example the official symbol for Uruguayan pesos is $ instead of $U.  
+On the other hand, I used the same API named before to get the country coordinates as stated in the exercise. The suggested APIs didn't show the country coordinates but the ip ones. I would have used those coordinates for the distance to Uruguay calculation but I respected the statement as is.  
 Finally, the conversions API has a free requests limit, so this would make the high concurrency environment impossible to satisfy with the current free pricing plan.
 
 2. Mainly due to the short time I was not able to make the extensive research I would have liked to do and the deployment itself, so I ended up deciding to use BigQuery as the database for this project, as I am pretty used to work with it. I don't think it is the optimal platform for storing the requests data in such high concurrency conditions but it can do a pretty good job nevertheless.
